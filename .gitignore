@@ -1,0 +1,9 @@
+.DS_Store
+.build/
+dist/
+*.app/
+*.xcuserstate
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+hs_err_pid*.log
+*.log

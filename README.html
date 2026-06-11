@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plain Craft Launcher (PCL) macOS</title>
+  <style>
+    body {
+      margin: 0;
+      color: #17202a;
+      background: #f6f8fb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+      line-height: 1.55;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { margin-bottom: 20px; }
+    h1 { margin: 0 0 8px; font-size: 34px; letter-spacing: 0; }
+    h2 { margin: 0 0 12px; font-size: 22px; letter-spacing: 0; }
+    section {
+      background: white;
+      border: 1px solid #d9e0e8;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 0 0 16px;
+      box-shadow: 0 10px 30px rgba(18, 30, 48, 0.06);
+    }
+    code {
+      background: #eef2f7;
+      border: 1px solid #dbe3ed;
+      border-radius: 5px;
+      padding: 1px 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    pre {
+      margin: 0;
+      padding: 14px;
+      overflow-x: auto;
+      color: #e5e7eb;
+      background: #101827;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .copy-block { position: relative; margin: 10px 0; }
+    button {
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      background: white;
+      padding: 7px 11px;
+      cursor: pointer;
+    }
+    .copy-btn {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      color: white;
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.25);
+      font-size: 12px;
+    }
+    ul { padding-left: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
+    th { color: #475569; font-size: 13px; }
+    details {
+      margin-top: 12px;
+      border: 1px solid #dbe3ed;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px 14px;
+    }
+    summary { cursor: pointer; font-weight: 700; }
+    .mini-copy {
+      margin-left: 8px;
+      padding: 3px 7px;
+      font-size: 12px;
+    }
+    .pill {
+      display: inline-block;
+      margin: 4px 6px 4px 0;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eaf1ff;
+      color: #1d4ed8;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Plain Craft Launcher (PCL) macOS</h1>
+      <p>这是第三方基于 Plain Craft Launcher 独立进行二次创作的 macOS 原生重构工程，不是官方 PCL。原作作者为龙腾猫跃，源码发布时保留原项目 <code>LICENCE</code> 指南与署名说明。</p>
+      <span class="pill">SwiftUI</span>
+      <span class="pill">AppKit</span>
+      <span class="pill">macOS 14+</span>
+      <span class="pill">Native Shell</span>
+    </header>
+
+    <section>
+      <h2>授权与署名</h2>
+      <p>本项目属于原 <code>LICENCE</code> 中的重度使用：它重新实现了 PCL 的 Minecraft 启动、下载和 Mod 管理等实质功能。因此仓库、应用关于页和文档均明确标注第三方二创身份，并保留原作者署名。</p>
+      <table>
+        <tbody>
+          <tr>
+            <td>原作作者</td>
+            <td>龙腾猫跃 <button class="mini-copy" data-value="龙腾猫跃">复制</button></td>
+          </tr>
+          <tr>
+            <td>赞助链接</td>
+            <td><code>https://meloong.com/afd/a/LTCat</code> <button class="mini-copy" data-value="https://meloong.com/afd/a/LTCat">复制</button></td>
+          </tr>
+          <tr>
+            <td>原项目</td>
+            <td><code>https://github.com/Meloong-Git/PCL</code> <button class="mini-copy" data-value="https://github.com/Meloong-Git/PCL">复制</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>运行</h2>
+      <div class="copy-block">
+        <button class="copy-btn" data-copy="run">复制</button>
+        <pre id="run">cd PCLMac
+swift run PCLMac</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>构建 .app</h2>
+      <div class="copy-block">
+        <button class="copy-btn" data-copy="build">复制</button>
+        <pre id="build">cd PCLMac
+chmod +x Scripts/build-macos-app.sh
+Scripts/build-macos-app.sh
+open "dist/Plain Craft Launcher (PCL) macOS.app"</pre>
+      </div>
+      <p>如果 <code>/Applications</code> 里已有同名旧包，请优先使用上面的 <code>dist/Plain Craft Launcher (PCL) macOS.app</code> 路径打开；进入「更多 → 关于」可确认当前运行位置并复制完整路径。</p>
+    </section>
+
+    <section>
+      <h2>安装到 Applications</h2>
+      <p>打包脚本默认不会覆盖系统应用目录。确认要更新正式安装包时，显式加 <code>--install</code>；若目标位置已有同名 app，会先备份成带时间戳的 <code>.backup</code> 包，再安装新构建。</p>
+      <div class="copy-block">
+        <button class="copy-btn" data-copy="install-app">复制</button>
+        <pre id="install-app">cd PCLMac
+Scripts/build-macos-app.sh --install
+open "/Applications/Plain Craft Launcher (PCL) macOS.app"</pre>
+      </div>
+      <details>
+        <summary>安装到自定义目录</summary>
+        <div class="copy-block">
+          <button class="copy-btn" data-copy="install-custom">复制</button>
+          <pre id="install-custom">cd PCLMac
+Scripts/build-macos-app.sh --install --install-dir "$HOME/Applications"</pre>
+        </div>
+      </details>
+    </section>
+
+    <section>
+      <h2>当前已接入</h2>
+      <ul>
+        <li>SwiftUI/AppKit 原生 macOS 窗口。</li>
+        <li>接近 PCL 的顶部导航、左右分栏和启动页布局。</li>
+        <li>Minecraft 文件夹扫描：默认读取 <code>~/Library/Application Support/minecraft</code>，也可在「设置 → 系统 → 路径」用 macOS 原生文件选择器切换到任意 Minecraft 根目录；启动、下载、整合包导入、资源包/光影包安装和日志扫描都会跟随该目录。</li>
+        <li>Java 探测与自动选择：<code>/usr/libexec/java_home</code>、<code>which java</code>、SDKMAN、<code>/Library/Java/JavaVirtualMachines</code>，以及启动器安装到 <code>~/Library/Application Support/PCL/JavaRuntimes</code> 的 Mojang Java Runtime；启动时会读取版本 JSON 的 <code>javaVersion.majorVersion</code>，在自动选择开启时匹配最接近的兼容 JDK，并在启动页显示版本要求与实际使用的 Java。</li>
+        <li>离线启动链：解析版本 JSON、继承链、library、macOS natives、<code>:</code> classpath，并执行 Java 进程；支持 PCL 风格版本隔离，可在全局或单版本设置里选择使用版本目录或共用 Minecraft 根目录作为 <code>gameDir</code>；支持全局或单版本配置服务器地址，启动后自动加入指定服务器，地址栏可直接粘贴 <code>host:port</code>。</li>
+        <li>依赖补全：可在启动页提前下载缺失的 client jar、libraries、native jars、asset index、asset objects，基础依赖预补全不要求先完成正版/Authlib/统一通行证登录；正式启动前仍会兜底检查并做 SHA-1 校验；本地已存在文件会并发检查，下载继续按线程数并发执行；启动页会显示总进度、下载/跳过计数和最近处理的文件，并对大量已存在资源做 UI 进度节流，减少启动前界面卡顿。</li>
+        <li>版本列表管理：启动页与版本表格支持本地搜索、收藏/原版/Fabric/Forge/Quilt/NeoForge 快速筛选、隐藏、显示隐藏版本和右键快捷菜单；版本表格会把加载器与版本类型显示为 <code>Fabric · 正式版</code> 这类可读文本，选中版本会显示加载器、Java、游戏目录、内存、窗口、自动进服和版本路径详情，并可一键复制摘要；收藏版本会排在普通版本前面，隐藏版本默认过滤，方便整理大型实例列表。</li>
+        <li>版本下载页：支持「官方」「BMCLAPI」「官方 + BMCLAPI」下载源，读取版本清单、搜索筛选，并把版本 JSON 安装到本机 Minecraft 目录；混合源会优先走 BMCLAPI，失败后回落官方地址。</li>
+        <li>Fabric 安装链：读取 Fabric Meta API，选择稳定 Loader，安装继承型 profile，并解析 Maven 坐标依赖。</li>
+        <li>Quilt 安装链：读取 Quilt Meta API，优先选择稳定 Loader，安装继承型 profile，并解析 Quilt Maven 依赖。</li>
+        <li>Forge / NeoForge 安装链：读取 Maven metadata，下载 installer jar，并用当前 Java 执行客户端安装；Mojang、Forge 和 NeoForge Maven 资源会跟随下载源切换。</li>
+        <li>下载任务中心：版本安装、Mojang Java Runtime 安装、Mod/资源包下载和整合包导入会进入「下载 → 任务」，显示进行中数量、状态、进度、结果与 Finder 位置；任务历史会跨启动保留，并支持暂停运行中的版本安装与 Java Runtime 安装、暂停后继续、失败后重试、复制摘要、清理已完成、清理失败/暂停和清空历史；已完成文件会保留，继续时会跳过已完成部分；Java Runtime 大量文件安装会节流 UI 进度刷新，降低安装时卡顿。</li>
+        <li>原生结果通知：默认关闭，可在「设置 → 启动」开启 macOS 通知中心提示；安装、导入、下载任务完成/失败/暂停，以及游戏退出或启动失败时会发结果通知，普通进度仍只显示在任务中心和启动页，避免刷屏。</li>
+        <li>Dock 角标：默认开启，可在「设置 → 启动」关闭；下载或安装任务进行中会在 Dock 图标上显示任务数量，游戏运行中会显示 <code>MC</code>，任务与游戏同时存在时显示 <code>数量+</code>，减少频繁打开任务中心确认状态。</li>
+        <li>资源详情面板：Modrinth 与 CurseForge 搜索结果会显示项目简介、作者、下载量、版本/分类信息、最近版本文件列表；版本文件可点选，安装/导入按钮会按所选文件执行，并支持打开项目网页、复制详情，以及通过原生文件选择器导入本地 <code>.mrpack</code> / CurseForge <code>.zip</code> 整合包为独立实例。</li>
+        <li>联机页：扫描 Minecraft 局域网广播 <code>224.0.2.60:4445</code>，解析 <code>[MOTD]</code>/<code>[AD]</code> 房间信息，支持复制房间地址、写入启动后自动进服设置，并可把 LAN 房间或手动地址保存到常用服务器列表；启动页会显示当前自动进服目标，常用服务器可一键启动并进服。</li>
+        <li>日志与崩溃报告：更多页会扫描 <code>logs/latest.log</code>、<code>crash-reports</code> 和 <code>hs_err_pid*.log</code>，提供摘要、尾部预览、Finder 显示、复制摘要和本地自动诊断建议。</li>
+        <li>启动退出监控：记录 Minecraft 进程 PID、退出码和运行时长；异常退出时自动切到「更多 → 日志」并刷新崩溃诊断。</li>
+        <li>Microsoft 正版登录链：Device Code、OAuth refresh、Xbox Live、XSTS、Minecraft Services、正版资格校验、Profile 获取。</li>
+        <li>统一通行证 Nide 登录链：复用 Yggdrasil authenticate、refresh、validate，并按 PCL 原版添加 <code>nide8auth.jar</code> JVM agent。</li>
+        <li>Authlib-Injector 登录链：启动页和设置页均可填写服务器地址，支持 authenticate、refresh、validate、多角色选择、Authlib-Injector jar 下载和 JVM agent 参数。</li>
+        <li>Keychain 凭据保存：Microsoft access token 和 refresh token 不写入普通偏好设置。</li>
+        <li>Keychain 凭据保存：统一通行证、Authlib access token、client token 和密码不写入普通偏好设置。</li>
+        <li>macOS 偏好设置持久化：保留登录模式、离线玩家名、统一通行证服务器 ID、Authlib 服务器、自定义 Minecraft 文件夹、内存、内存预设、游戏窗口尺寸、窗口预设、全屏启动、版本隔离、自动进服、常用服务器、全局额外 JVM 参数、全局额外游戏参数、原生通知开关、Dock 角标开关、启动后隐藏/退出后显示启动器、下载源、下载线程、主题色、窗口外观、首页卡片布局、上次选择的版本与 Java，以及版本收藏/隐藏状态。</li>
+        <li>版本级设置：每个实例目录可保存独立 Java、内存、内存预设、游戏窗口尺寸、窗口预设、全屏启动、版本隔离、自动进服、额外 JVM 参数和额外游戏参数；启动时会先应用全局高级参数，再追加当前版本的高级参数。</li>
+        <li>外观设置：支持 PCL 风格主题色、深浅外观、启动页提示开关、首页卡片开关和本地背景图；背景图通过 macOS 原生文件选择器选择，透明度可调，并实时应用到启动器主窗口。</li>
+        <li>交互优化：顶部页签和侧栏整块区域可点，使用更轻的原生按钮路径，并在默认高性能模式下保留短促选中动画；本地版本列表、远程版本清单和下载任务计数会缓存排序/筛选/汇总结果，避免切页或普通状态刷新时重复计算；高性能模式会降低毛玻璃、阴影、背景图、模糊和 matched geometry 成本，并让主页面切换直接跟随选中状态渲染，偏好设置会短延迟合并保存，减少点击、切页、输入和滚动时的卡顿。</li>
+        <li>macOS 菜单栏与快捷键：提供「PCL」与「页面」菜单，支持 <code>⌘1</code>~<code>⌘5</code> 切换主页面、<code>⌘↩</code> 启动、<code>⌘.</code> 停止、<code>⌘R</code> 刷新、<code>⌘O</code> 打开当前实例、<code>⇧⌘I</code>/<code>⇧⌘E</code> 导入/导出实例。</li>
+        <li>实例管理：当前实例支持 Finder 打开、复制、删除到废纸篓，通过 macOS 保存面板导出为 <code>.zip</code> 备份，也可通过原生文件选择器导入实例备份；版本列表可右键直接启动、收藏/隐藏、打开、复制、导出、删除或进入版本设置，导入前会预检 zip 路径并自动处理重名版本，便于迁移、回滚和分享。</li>
+        <li>本地 Mod 管理：扫描当前实例 <code>mods</code> 目录，识别 <code>fabric.mod.json</code>、<code>quilt.mod.json</code>、<code>META-INF/mods.toml</code>、<code>mcmod.info</code>，显示加载器、版本、启用/禁用状态、文件大小和更新时间，并支持通过 macOS 文件选择器添加本地 <code>.jar</code>/<code>.zip</code>/<code>.litemod</code>、一键启用、禁用、Finder 显示。</li>
+        <li>启动配置摘要、启动前就绪检查、启动命令预览与停止按钮：启动前可确认登录、Java、内存、窗口、游戏目录、自动进服和额外参数；缺少版本、Java、对应登录账户或 Java 主版本低于实例要求时会在按钮下方、状态卡和 Java 卡直接提示原因，Java 卡可打开当前版本 Java 覆盖设置、复制诊断，若本机存在兼容 Java 可一键指定，若缺少兼容 Java 可直接安装 Mojang Java Runtime 并自动应用到当前版本；实际启动后仍可复制完整命令用于排错。</li>
+        <li>应用身份页：更多 → 关于会显示当前运行的 app 版本、Bundle ID、安装位置和完整路径，可一键复制路径/摘要或在 Finder 中显示，避免 dist 构建与 <code>/Applications</code> 旧包混淆。</li>
+        <li><code>.app</code> 本地打包脚本：默认输出到 <code>dist</code>，也可显式 <code>--install</code> 安装到 Applications，并自动备份旧包。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>偏好设置</h2>
+      <p>启动器使用 macOS 原生 <code>UserDefaults</code> 保存轻量设置。下次打开应用时会恢复常用启动参数，并在重新扫描环境后匹配上次选择的版本名和 Java 路径。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>状态</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>账户</td>
+            <td>登录模式、离线玩家名、统一通行证服务器 ID、上次输入的登录账号。</td>
+          </tr>
+          <tr>
+            <td>启动</td>
+            <td>内存上限、内存预设、高性能模式、自动选择 Java、窗口尺寸、窗口预设、全屏启动、版本隔离、自动进入服务器、全局额外 JVM 参数、全局额外游戏参数、原生通知、Dock 角标、启动后隐藏/退出后显示启动器。</td>
+          </tr>
+          <tr>
+            <td>选择</td>
+            <td>本地版本名、Java 可执行文件路径、本地版本搜索、快速筛选项、版本收藏列表、隐藏列表和“显示隐藏版本”开关。</td>
+          </tr>
+          <tr>
+            <td>路径</td>
+            <td>自定义 Minecraft 根目录；为空时使用 macOS 默认目录。</td>
+          </tr>
+          <tr>
+            <td>下载</td>
+            <td>版本筛选、下载源、安装加载器、线程数量。</td>
+          </tr>
+          <tr>
+            <td>界面</td>
+            <td>主题色、窗口外观、启动页提示条、首页卡片、本地背景图和背景强度。</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="copy-block">
+        <button class="copy-btn" data-copy="defaults">复制</button>
+        <pre id="defaults">defaults read com.paipaiio.pcl</pre>
+      </div>
+      <details>
+        <summary>首页卡片 ID</summary>
+        <div class="copy-block">
+          <button class="copy-btn" data-copy="home-card-ids">复制</button>
+          <pre id="home-card-ids">status
+java
+dependency
+command
+launchLog
+versions</pre>
+        </div>
+      </details>
+    </section>
+
+    <section>
+      <h2>正版登录</h2>
+      <p>mac 版按 PCL 原版的 6 步链路实现 Microsoft 登录。登录成功后会把 Minecraft access token、refresh token、UUID 和玩家名保存到 Keychain 与账户库，启动游戏时使用 <code>userType=msa</code> 和正版 access token。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>步骤</th>
+            <th>接口</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Microsoft device code / token / refresh token</td></tr>
+          <tr><td>2</td><td>Xbox Live user authenticate</td></tr>
+          <tr><td>3</td><td>XSTS authorize</td></tr>
+          <tr><td>4</td><td>Minecraft login_with_xbox</td></tr>
+          <tr><td>5</td><td>Minecraft entitlements mcstore</td></tr>
+          <tr><td>6</td><td>Minecraft profile</td></tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>Client ID 是什么</summary>
+        <p><code>client_id</code> 是 Microsoft 应用注册的公开应用编号，用来告诉 Microsoft “正在请求授权的是哪个启动器应用”。它不是用户密码，也不是 client secret。mac 版会优先使用设置页的高级覆盖值，其次读取运行环境的 <code>PCL_MS_CLIENT_ID</code>，最后读取 app 包内置的 <code>PCLMicrosoftClientID</code>；正式分发包应在打包时内置它，普通用户不需要自己填写。</p>
+        <div class="copy-block">
+          <button class="copy-btn" data-copy="ms-client">复制</button>
+          <pre id="ms-client">PCL_MS_CLIENT_ID="你的 Microsoft 应用 Client ID" Scripts/build-macos-app.sh
+plutil -p "dist/Plain Craft Launcher (PCL) macOS.app/Contents/Info.plist" | grep PCLMicrosoftClientID</pre>
+        </div>
+      </details>
+    </section>
+
+    <section>
+      <h2>缺失密钥</h2>
+      <p>下面这些内容在 PCL 开源版中就是外部配置或删减项。要做到“发布级完整复刻”，需要补齐属于这个 mac 版应用自己的密钥或替代实现。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>影响</th>
+            <th>当前处理</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Microsoft Client ID</td>
+            <td>正版登录授权</td>
+            <td>登录时从设置页高级覆盖、<code>PCL_MS_CLIENT_ID</code> 或 app 内置 <code>PCLMicrosoftClientID</code> 自动解析；发布包可做到用户无感。</td>
+          </tr>
+          <tr>
+            <td>CurseForge API Key</td>
+            <td>整合包、Mod、资源包搜索下载</td>
+            <td>已接入设置页与 <code>PCL_CURSEFORGE_API_KEY</code>；Mod、资源包可下载，CurseForge 整合包可下载或从本地 <code>.zip</code> 导入为独立实例。</td>
+          </tr>
+          <tr>
+            <td>Windows 专用模块</td>
+            <td>EasyTier、注册表、托盘等 Windows 行为</td>
+            <td>需要 macOS 原生替代实现。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>统一通行证</h2>
+      <p>统一通行证按 PCL 原版的 Nide 流程接入。服务器 ID 来自服主后台的「集成说明」，登录地址会自动拼成 <code>https://auth.mc-user.com:233/&lt;服务器ID&gt;/authserver</code>。启动前会读取下载信息，校验并准备 <code>nide8auth.jar</code>，再追加 <code>-javaagent</code> 参数。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>值</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>服务器 ID 来源</td>
+            <td><code id="nide-intro">https://login.mc-user.com:233/server/intro</code></td>
+            <td><button class="mini-copy" data-copy="nide-intro">复制</button></td>
+          </tr>
+          <tr>
+            <td>认证端点模板</td>
+            <td><code id="nide-authserver">https://auth.mc-user.com:233/&lt;服务器ID&gt;/authserver</code></td>
+            <td><button class="mini-copy" data-copy="nide-authserver">复制</button></td>
+          </tr>
+          <tr>
+            <td>jar 下载端点</td>
+            <td><code id="nide-jar">https://login.mc-user.com:233/index/jar</code></td>
+            <td><button class="mini-copy" data-copy="nide-jar">复制</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>启动参数</summary>
+        <div class="copy-block">
+          <button class="copy-btn" data-copy="nide-agent">复制</button>
+          <pre id="nide-agent">-javaagent:"$APP_SUPPORT/PCL/tools/nide8auth.jar"="服务器ID"</pre>
+        </div>
+      </details>
+    </section>
+
+    <section>
+      <h2>Authlib 登录</h2>
+      <p>Authlib 入口按 PCL 的 Yggdrasil 服务器流程实现。启动页登录卡片可直接填写认证服务器、账号和密码；登录成功后保存角色、access token、client token；启动前会按当前登录模式选择 Authlib 账户，尝试 validate，失败后 refresh，再失败时使用 Keychain 中的密码重新 authenticate。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>服务器</td>
+            <td>可以填写皮肤站根地址或 <code>/authserver</code> 地址，启动器会规范到认证端点。</td>
+          </tr>
+          <tr>
+            <td>角色</td>
+            <td>多角色账户会优先使用上次缓存的 UUID，否则选择服务器返回的第一个角色。</td>
+          </tr>
+          <tr>
+            <td>启动</td>
+            <td>启动前下载并校验 <code>authlib-injector.jar</code>，然后添加 <code>-javaagent</code>、<code>authlibinjector.side</code> 和 prefetched 元数据。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>下载与安装</h2>
+      <p>下载页会按「设置 → 下载」里的下载源读取版本 manifest，再把选中的版本写入 macOS Minecraft 标准目录。加载器可选「原版」「Forge」「Fabric」「Quilt」或「NeoForge」。选择 Fabric / Quilt 时会先安装原版 JSON，再写入对应 profile；选择 Forge / NeoForge 时会下载 installer jar，并用当前 Java 执行客户端安装。首次启动时，启动链会继续补齐 client jar、libraries、native jars 和 assets。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>值</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>版本清单</td>
+            <td><code id="manifest-url">https://piston-meta.mojang.com/mc/game/version_manifest_v2.json</code></td>
+            <td><button class="mini-copy" data-copy="manifest-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>BMCLAPI 版本清单</td>
+            <td><code id="bmcl-manifest-url">https://bmclapi2.bangbang93.com/mc/game/version_manifest_v2.json</code></td>
+            <td><button class="mini-copy" data-copy="bmcl-manifest-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>BMCLAPI Maven 模板</td>
+            <td><code id="bmcl-maven-url">https://bmclapi2.bangbang93.com/maven/&lt;group/path&gt;/&lt;artifact&gt;/&lt;version&gt;/&lt;file&gt;.jar</code></td>
+            <td><button class="mini-copy" data-copy="bmcl-maven-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>BMCLAPI 资源模板</td>
+            <td><code id="bmcl-assets-url">https://bmclapi2.bangbang93.com/assets/&lt;hash-prefix&gt;/&lt;sha1&gt;</code></td>
+            <td><button class="mini-copy" data-copy="bmcl-assets-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>默认 Minecraft 根目录</td>
+            <td><code id="minecraft-root">~/Library/Application Support/minecraft</code></td>
+            <td><button class="mini-copy" data-copy="minecraft-root">复制</button></td>
+          </tr>
+          <tr>
+            <td>版本目录</td>
+            <td><code id="versions-path">&lt;Minecraft 根目录&gt;/versions/&lt;version&gt;/&lt;version&gt;.json</code></td>
+            <td><button class="mini-copy" data-copy="versions-path">复制</button></td>
+          </tr>
+          <tr>
+            <td>资源目录</td>
+            <td><code id="assets-path">&lt;Minecraft 根目录&gt;/assets</code></td>
+            <td><button class="mini-copy" data-copy="assets-path">复制</button></td>
+          </tr>
+          <tr>
+            <td>Fabric Loader 列表</td>
+            <td><code id="fabric-loader-url">https://meta.fabricmc.net/v2/versions/loader/&lt;version&gt;</code></td>
+            <td><button class="mini-copy" data-copy="fabric-loader-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>Forge Maven Metadata</td>
+            <td><code id="forge-metadata-url">https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml</code></td>
+            <td><button class="mini-copy" data-copy="forge-metadata-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>Fabric Profile</td>
+            <td><code id="fabric-profile-url">https://meta.fabricmc.net/v2/versions/loader/&lt;version&gt;/&lt;loader&gt;/profile/json</code></td>
+            <td><button class="mini-copy" data-copy="fabric-profile-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>Quilt Loader 列表</td>
+            <td><code id="quilt-loader-url">https://meta.quiltmc.org/v3/versions/loader/&lt;version&gt;</code></td>
+            <td><button class="mini-copy" data-copy="quilt-loader-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>Quilt Profile</td>
+            <td><code id="quilt-profile-url">https://meta.quiltmc.org/v3/versions/loader/&lt;version&gt;/&lt;loader&gt;/profile/json</code></td>
+            <td><button class="mini-copy" data-copy="quilt-profile-url">复制</button></td>
+          </tr>
+          <tr>
+            <td>NeoForge Maven Metadata</td>
+            <td><code id="neoforge-metadata-url">https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml</code></td>
+            <td><button class="mini-copy" data-copy="neoforge-metadata-url">复制</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>安装流程</summary>
+        <ol>
+          <li>打开「下载」页，等待版本列表加载完成。</li>
+          <li>如果要使用非默认游戏目录，先到「设置 → 系统 → 路径」选择 Minecraft 根目录。</li>
+          <li>用「正式版 / 快照版 / 全部」筛选，也可以直接搜索版本号。</li>
+          <li>在「加载器」里选择「原版」「Forge」「Fabric」「Quilt」或「NeoForge」。</li>
+          <li>选中版本后点击「安装版本」。完成后会自动回到「启动」页并刷新本地实例。</li>
+          <li>安装、下载和整合包导入过程中可打开「下载 → 任务」查看统一任务记录、复制任务摘要和打开 Finder 位置。</li>
+          <li>需要单独调整某个版本时，在启动页点击版本卡片里的滑杆按钮，进入「设置 → 版本」配置 Java、内存和高级参数。</li>
+          <li>可以先在启动页的「依赖补全」卡片点击「预补全」，即使还没登录也能提前下载基础资源；点击「启动游戏」时仍会兜底检查依赖，然后执行 Java 命令。</li>
+        </ol>
+      </details>
+      <details>
+        <summary>任务摘要模板</summary>
+        <div class="copy-block">
+          <button class="copy-btn" data-copy="task-summary-template">复制</button>
+          <pre id="task-summary-template">名称：&lt;任务名称&gt;
+类型：&lt;版本安装 / Modrinth Mod / CurseForge 资源&gt;
+状态：&lt;进行中 / 已完成 / 失败 / 已暂停&gt;
+进度：&lt;百分比&gt;
+详情：&lt;任务详情或错误信息&gt;
+创建：&lt;创建时间&gt;
+更新：&lt;更新时间&gt;
+位置：&lt;保存路径，可选&gt;
+继续/重试：&lt;可恢复动作，可选&gt;</pre>
+        </div>
+      </details>
+      <details>
+        <summary>Forge / NeoForge 安装命令</summary>
+        <div class="copy-block">
+          <button class="copy-btn" data-copy="forge-command">复制</button>
+          <pre id="forge-command">java -jar forge-&lt;mc-version&gt;-&lt;forge-version&gt;-installer.jar --installClient</pre>
+        </div>
+        <div class="copy-block">
+          <button class="copy-btn" data-copy="neoforge-command">复制</button>
+          <pre id="neoforge-command">java -jar neoforge-&lt;loader-version&gt;-installer.jar --install-client</pre>
+        </div>
+      </details>
+    </section>
+
+    <section>
+      <h2>联机</h2>
+      <p>联机页会监听 Minecraft Java 版局域网广播。对方在游戏内选择“对局域网开放”后，启动器可以在「联机 → 房间」扫描到世界名称和端口，并把房间地址复制出来、写入启动服务器设置，或收藏到「联机 → 连接信息」的常用服务器列表。启动页左侧也会显示当前自动进服目标，可直接从常用服务器启动并进服。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>值</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>广播地址</td>
+            <td><code id="lan-multicast">224.0.2.60:4445</code></td>
+            <td><button class="mini-copy" data-copy="lan-multicast">复制</button></td>
+          </tr>
+          <tr>
+            <td>广播格式</td>
+            <td><code id="lan-format">[MOTD]世界名[/MOTD][AD]端口[/AD]</code></td>
+            <td><button class="mini-copy" data-copy="lan-format">复制</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>局域网房间流程</summary>
+        <ol>
+          <li>同一网络内的主机玩家在 Minecraft 暂停菜单中打开“对局域网开放”。</li>
+          <li>在启动器打开「联机 → 房间」，点击「扫描」。</li>
+          <li>选中发现的房间后，可以复制 <code>host:port</code>，也可以点击「设为启动服务器」或「收藏到常用服务器」。</li>
+          <li>设为启动服务器后，启动器会把主机地址和端口写入全局自动进服设置，下一次启动当前实例时自动附加 <code>--server</code> 和 <code>--port</code>。</li>
+        </ol>
+      </details>
+      <details>
+        <summary>常用服务器模板</summary>
+        <div class="copy-block">
+          <button class="copy-btn" data-copy="server-favorite-template">复制</button>
+          <pre id="server-favorite-template">{
+  "name": "Hypixel",
+  "address": "mc.hypixel.net",
+  "port": null
+}</pre>
+        </div>
+        <p>常用服务器会保存到偏好设置里；选中后可一键复制地址、写入全局启动服务器设置，或直接启动当前实例并进入该服务器。</p>
+      </details>
+    </section>
+
+    <section>
+      <h2>验证</h2>
+      <div class="copy-block">
+        <button class="copy-btn" data-copy="test">复制</button>
+        <pre id="test">cd PCLMac
+swift test</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>下一步</h2>
+      <ul>
+        <li>扩大 Forge / NeoForge / Fabric / Quilt 的真实实例回归测试。</li>
+        <li>继续补齐联机账户、更完整的独立下载队列和更多 PCL 设置项。</li>
+        <li>继续扩展更多 PCL 个性化设置，同时保留 macOS 原生手感。</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll(".copy-btn, .mini-copy").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copy);
+        if (!target) return;
+        await navigator.clipboard.writeText(target.innerText);
+        const text = button.textContent;
+        button.textContent = "已复制";
+        setTimeout(() => button.textContent = text, 1100);
+      });
+    });
+  </script>
+</body>
+</html>
